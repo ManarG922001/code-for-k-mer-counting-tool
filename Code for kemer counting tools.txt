@@ -1,0 +1,95 @@
+import tkinter
+from tkinter import  *
+main = Tk()
+mainframe = Frame(main,bg='powder blue')
+mainframe.pack(fill='both',expand=True)
+
+main.title('K-mer length')
+main.geometry('1400x700+0+0')
+
+
+def initt(t, k):
+    index = []
+    for i in range(len(t) - k + 1):
+        index.append((t[i: i + k], i))
+        # index.sort()
+    return len(index) , index
+
+
+seq_file = open("sequences.fasta", "r")
+
+line = seq_file.readline()
+meta = ""
+seq = ""
+while line:
+    line = line.rstrip()
+    if ">" in line:
+        meta = line
+    else:
+        seq = seq + line
+    line = seq_file.readline()
+
+#label to display
+
+myfont = ("Times", 18, "bold")
+l1 = Label(
+    mainframe,
+    text="Choose k-mer length :",
+    font=myfont,
+    fg="black",
+
+
+
+
+
+)
+l1.pack(fill='x')
+kmer_length = Entry(mainframe,font=myfont,justify="center")
+
+kmer_length.pack(pady=20)
+
+
+
+def check():
+    lengtth = int(kmer_length.get())
+
+    if lengtth < 3:
+        answer = Label(mainframe,text="Please enter a value above 3!")
+        answer.pack()
+    else:
+        T = tkinter.Text(mainframe,bd=5,relief='groove',wrap='word',font=myfont)
+
+        scrolly=Scrollbar(mainframe)
+        T = tkinter.Text(mainframe, relief='groove', wrap='word', font=myfont, yscrollcommand=scrolly.set)
+        scrolly.pack(side=RIGHT,fill=Y)
+        answer ="the k-mers number is "+str(initt(seq,lengtth))
+        T.insert(tkinter.END,answer)
+        T.pack(pady=20)
+        scrolly.config(command=T.yview)
+
+
+
+
+
+
+
+
+buttonn = Button(
+
+    mainframe,
+
+    text="Enter",
+    font=myfont,
+    command=check,
+    fg="white",
+    bg="black",
+    borderwidth=8,
+
+)
+
+buttonn.pack(fill='x')
+
+
+
+
+main.mainloop()
